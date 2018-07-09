@@ -13,8 +13,49 @@ namespace GeometricFigure_les6
             X = x;
             Y = y;
         }
-       public double X { get; set; } 
-       public double Y { get; set; }
+        public void SetNewCoordinates(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
+        public double GiveDistanceBetween(Point t)
+        {
+            return Math.Sqrt( Math.Pow(t.X - this.X , 2) + Math.Pow(t.Y - this.Y , 2));
+        }
+        public override string ToString()
+        {
+            return X + " " + Y;
+        }
+        public double X { get;private set; } 
+       public double Y { get;private set; }
+    }
+
+    struct Angle
+    {
+        public Angle( float _deg)
+        {
+            InDegrees = _deg;
+            InRadians = (double)_deg * Math.PI / 180;
+        }
+        public Angle (double _rad)
+        {
+            InRadians = _rad;
+            InDegrees = (float)(_rad * 180 / Math.PI);
+        }
+
+        public void SetNewAngle(float _d)
+        {
+            InDegrees = _d;
+            InRadians = (double)_d * Math.PI / 180;
+        }
+        public void SetNewAngle(double _r)
+        {
+            InRadians = _r;
+            InDegrees = (float)(_r * 180 / Math.PI);
+        }
+
+        public float InDegrees { get; private set; }
+        public double InRadians { get;private set; }
     }
 
     class GeometricFigure
@@ -22,8 +63,7 @@ namespace GeometricFigure_les6
         protected Point CenterPoint;
         public GeometricFigure()
         {
-            CenterPoint.X = 0.0;
-            CenterPoint.Y = 0.0;
+            CenterPoint = new Point(0.0, 0.0);
         }
         public GeometricFigure(Point _c)
         {
@@ -33,10 +73,35 @@ namespace GeometricFigure_les6
         {
             return this.CenterPoint.X == g.CenterPoint.X && this.CenterPoint.Y == g.CenterPoint.Y;
         }
-        public void ChangeCenterCoordintes(double _newX , double _newY)
+        public void ChangeCenterCoordintes(double x , double y)
         {
-            CenterPoint.X = _newX;
-            CenterPoint.Y = _newY;
+            CenterPoint.SetNewCoordinates(x, y);
+        }
+    }
+    class Triangle : GeometricFigure
+    {
+        public Point FirstPoint { get; private set; }
+        public Point SecondPoint { get; private set; }
+        public Point ThirdPoint { get; private set; }
+        private Angle FirstAngle, SecondAngle, ThirdAngle;
+
+        public Triangle(Point _f , Point _s, Point _th)
+        {
+            FirstPoint = _f;
+            SecondPoint = _s;
+            ThirdPoint = _th;
+        }
+        public double DistanceBetweenFirstAndSecondPoint()
+        {
+            return FirstPoint.GiveDistanceBetween(SecondPoint);
+        }
+        public double DistanceBetweenSecondtAndThirdPoint()
+        {
+            return SecondPoint.GiveDistanceBetween(ThirdPoint);
+        }
+        public double DistanceBetweenThirdAndFirstPoint()
+        {
+            return ThirdPoint.GiveDistanceBetween(FirstPoint);
         }
     }
 }
