@@ -53,6 +53,15 @@ namespace GeometricFigure_les6
             InRadians = _r;
             InDegrees = (float)(_r * 180 / Math.PI);
         }
+        public static double GetAngleBy3Sides(double f, double s , double th)
+        {
+            return Math.Acos(  (Math.Pow(f, 2) + Math.Pow(s, 2) - Math.Pow(th, 2)) / (2 * f * s)  );
+        }
+
+        public override string ToString()
+        {
+            return InDegrees + "_d";
+        }
 
         public float InDegrees { get; private set; }
         public double InRadians { get;private set; }
@@ -77,6 +86,8 @@ namespace GeometricFigure_les6
         {
             CenterPoint.SetNewCoordinates(x, y);
         }
+        public virtual string GetCenterCoordinates()
+        { return CenterPoint.ToString(); }
     }
     class Triangle : GeometricFigure
     {
@@ -87,9 +98,20 @@ namespace GeometricFigure_les6
 
         public Triangle(Point _f , Point _s, Point _th)
         {
+
+
             FirstPoint = _f;
             SecondPoint = _s;
             ThirdPoint = _th;
+
+            CenterPoint = new Point((_f.X + _s.X + _th.X) / 3, (_f.Y + _s.Y + _th.Y) / 3);
+           
+            FirstAngle = new Angle(Angle.GetAngleBy3Sides(DistanceBetweenSecondtAndThirdPoint(),
+               DistanceBetweenThirdAndFirstPoint(), DistanceBetweenFirstAndSecondPoint() ));
+            SecondAngle = new Angle(Angle.GetAngleBy3Sides(DistanceBetweenThirdAndFirstPoint(),
+                DistanceBetweenFirstAndSecondPoint(),DistanceBetweenSecondtAndThirdPoint() ));
+            ThirdAngle = new Angle( Angle.GetAngleBy3Sides( DistanceBetweenFirstAndSecondPoint(),
+                DistanceBetweenSecondtAndThirdPoint(), DistanceBetweenThirdAndFirstPoint()));
         }
         public double DistanceBetweenFirstAndSecondPoint()
         {
@@ -102,6 +124,14 @@ namespace GeometricFigure_les6
         public double DistanceBetweenThirdAndFirstPoint()
         {
             return ThirdPoint.GiveDistanceBetween(FirstPoint);
+        }
+        public string GetAngles()
+        {
+            return FirstAngle.ToString() + "\t\t"+ SecondAngle.ToString() + "\t\t"+ ThirdAngle.ToString();
+        }
+        public override string GetCenterCoordinates()
+        {
+            return "In Triangle " + base.GetCenterCoordinates() ;
         }
     }
 }
