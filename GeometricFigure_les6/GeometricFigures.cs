@@ -24,7 +24,7 @@ namespace GeometricFigure_les6
         }
         public override string ToString()
         {
-            return X + " " + Y;
+            return "(" + X + ";" + Y +")";
         }
         public double X { get;private set; } 
        public double Y { get;private set; }
@@ -78,17 +78,25 @@ namespace GeometricFigure_les6
         {
             CenterPoint = _c;
         }
-        public bool Equals(GeometricFigure g)
-        {
-            return this.CenterPoint.X == g.CenterPoint.X && this.CenterPoint.Y == g.CenterPoint.Y;
-        }
         public void ChangeCenterCoordintes(double x , double y)
         {
             CenterPoint.SetNewCoordinates(x, y);
         }
         public virtual string GetCenterCoordinates()
         { return CenterPoint.ToString(); }
+        protected virtual double Perimetr()
+        { return 0.0; }
+        protected virtual double Area ()
+        { return 0.0; }
+
+
+        public string GetPerimetr()
+        {
+            return "Perimeter is " + Perimetr();
+        }
+
     }
+
     class Triangle : GeometricFigure
     {
         public Point FirstPoint { get; private set; }
@@ -98,8 +106,6 @@ namespace GeometricFigure_les6
 
         public Triangle(Point _f , Point _s, Point _th)
         {
-
-
             FirstPoint = _f;
             SecondPoint = _s;
             ThirdPoint = _th;
@@ -112,26 +118,51 @@ namespace GeometricFigure_les6
                 DistanceBetweenFirstAndSecondPoint(),DistanceBetweenSecondtAndThirdPoint() ));
             ThirdAngle = new Angle( Angle.GetAngleBy3Sides( DistanceBetweenFirstAndSecondPoint(),
                 DistanceBetweenSecondtAndThirdPoint(), DistanceBetweenThirdAndFirstPoint()));
+
         }
-        public double DistanceBetweenFirstAndSecondPoint()
+        private double DistanceBetweenFirstAndSecondPoint()
         {
             return FirstPoint.GiveDistanceBetween(SecondPoint);
         }
-        public double DistanceBetweenSecondtAndThirdPoint()
+        private double DistanceBetweenSecondtAndThirdPoint()
         {
             return SecondPoint.GiveDistanceBetween(ThirdPoint);
         }
-        public double DistanceBetweenThirdAndFirstPoint()
+        private double DistanceBetweenThirdAndFirstPoint()
         {
             return ThirdPoint.GiveDistanceBetween(FirstPoint);
         }
         public string GetAngles()
         {
-            return FirstAngle.ToString() + "\t\t"+ SecondAngle.ToString() + "\t\t"+ ThirdAngle.ToString();
+            return "First:" + FirstAngle.ToString() + ";\t\tSecond:"+ SecondAngle.ToString() + ";\t\tThird:"+ ThirdAngle.ToString();
         }
         public override string GetCenterCoordinates()
         {
-            return "In Triangle " + base.GetCenterCoordinates() ;
+            return "Center of Triangle " + base.GetCenterCoordinates() ;
         }
+        protected override double Perimetr()
+        {
+            return DistanceBetweenFirstAndSecondPoint() + DistanceBetweenSecondtAndThirdPoint() + DistanceBetweenThirdAndFirstPoint();
+        }
+    }
+
+    class Circle : GeometricFigure
+    {
+        private double Radius;
+
+        public Circle(Point Center, double Radius)
+            :base(Center)
+        {
+            this.Radius = Radius;
+        }
+        public override string GetCenterCoordinates()
+        {
+            return "Center of Circle " + base.GetCenterCoordinates();
+        }
+        protected override double Perimetr()
+        {
+            return 2 * Math.PI * Radius;
+        } 
+        
     }
 }
